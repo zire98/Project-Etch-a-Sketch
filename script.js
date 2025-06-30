@@ -6,6 +6,14 @@ const GRID_WIDTH = 960;
 let grid;
 
 // Functions
+
+function getRandomRGBColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
 function clearGrid() {
     grid.innerHTML = "";
 }
@@ -21,7 +29,7 @@ function createGrid(size) {
         square.style.height = `${squareSize}px`;
 
         square.addEventListener("mouseover", () => {
-            square.style.backgroundColor = "black";
+            square.style.backgroundColor = getRandomRGBColor();
         });
 
         grid.appendChild(square);
