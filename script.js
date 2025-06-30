@@ -11,7 +11,19 @@ function getRandomRGBColor() {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
+    return { r, g, b };
+}
+
+function rgbToString({ r, g, b }) {
     return `rgb(${r}, ${g}, ${b})`;
+}
+
+function darkenColor({ r, g, b }, factor) {
+    return {
+        r: Math.floor(r * factor),
+        g: Math.floor(g * factor),
+        b: Math.floor(b * factor),
+    };
 }
 
 function clearGrid() {
@@ -28,8 +40,30 @@ function createGrid(size) {
         square.style.width = `${squareSize}px`;
         square.style.height = `${squareSize}px`;
 
+        const originalColor = getRandomRGBColor();
+        square.dataset.r = originalColor.r;
+        square.dataset.g = originalColor.g;
+        square.dataset.b = originalColor.b;
+        square.dataset.darkness = 0;
+
+        square.style.backgroundColor = rgbToString(originalColor);
+
         square.addEventListener("mouseover", () => {
-            square.style.backgroundColor = getRandomRGBColor();
+            let darkness = Number(square.dataset.darkness);
+            if (darkness < 10) {
+                darkness++;
+                square.dataset.darkness = darkness;
+                const factor = 1 - darkness * 0.1;
+                const darkenedColor = darkenColor(
+                    {
+                        r: Number(square.dataset.r),
+                        g: Number(square.dataset.g),
+                        b: Number(square.dataset.b),
+                    },
+                    factor
+                );
+                square.style.backgroundColor = rgbToString(darkenedColor);
+            }
         });
 
         grid.appendChild(square);
